@@ -115,12 +115,23 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
         if(!settings->value("Shortcuts--"+hash+"/FileSyncMode").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/FileSyncMode").toInt()) {
+            // ntsync is better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
+            // older Protons should just safely ignore this and fallback to fsync.
+            // (assuming WOW64 doesn't hurt compat with GE-Proton10's 1-8)
+            case NeroConstant::Fsync:
+                env.insert("PROTON_USE_NTSYNC", "1");
+                env.insert("PROTON_USE_WOW64", "1");
+                break;
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
             case NeroConstant::Esync:
                 env.insert("PROTON_NO_FSYNC", "1"); break;
             }
         } else switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
+            case NeroConstant::Fsync:
+                env.insert("PROTON_USE_NTSYNC", "1");
+                env.insert("PROTON_USE_WOW64", "1");
+                break;
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
             case NeroConstant::Esync:
@@ -561,6 +572,13 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         env.insert("OBS_VKCAPTURE", "1");
 
     switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
+    // ntsync is better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
+    // older Protons should just safely ignore this and fallback to fsync.
+    // (assuming WOW64 doesn't hurt compat with GE-Proton10's 1-8)
+    case NeroConstant::Fsync:
+        env.insert("PROTON_USE_NTSYNC", "1");
+        env.insert("PROTON_USE_WOW64", "1");
+        break;
     case NeroConstant::NoSync:
         env.insert("PROTON_NO_ESYNC", "1");
     case NeroConstant::Esync:
