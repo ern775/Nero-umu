@@ -500,7 +500,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             log.resize(0);
             log.write("Current running environment:\n");
             log.write(runner.environment().join('\n').toLocal8Bit());
-            log.write("\n\nRunning command:\n" + command.toLocal8Bit() + arguments.join(' ').toLocal8Bit() + '\n');
+            log.write("\n\nRunning command:\n" + command.toLocal8Bit() + ' ' + arguments.join(' ').toLocal8Bit() + '\n');
             log.write("==============================================\n");
         }
 
