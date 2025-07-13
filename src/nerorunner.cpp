@@ -767,6 +767,10 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     if(loggingEnabled) {
         log.open(QIODevice::WriteOnly);
         log.resize(0);
+        log.write("Current running environment:\n");
+        log.write(runner.environment().join('\n').toLocal8Bit());
+        log.write("\n\nRunning command:\n" + command.toLocal8Bit() + ' ' + arguments.join(' ').toLocal8Bit() + '\n');
+        log.write("==============================================\n");
     }
 
     runner.start(command, arguments);
