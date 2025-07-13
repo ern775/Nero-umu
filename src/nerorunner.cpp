@@ -618,20 +618,8 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     QStringList arguments;
     arguments.append("umu-run");
 
-    QString app = path;
-    QDir dosdevicesPath(NeroFS::GetPrefixesPath().path() + '/' + NeroFS::GetCurrentPrefix() + "/dosdevices");
-    QFileInfoList dosdevices(dosdevicesPath.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs, QDir::Name));
-    // .dots/relative paths don't really need a path fixup.
-    if(!app.startsWith("./") && !app.startsWith("~/") && !app.startsWith("C:/"))
-        for(auto const &device : std::as_const(dosdevices)) {
-            if(app.contains(device.symLinkTarget())) {
-                app.remove(device.symLinkTarget());
-                app.prepend(device.baseName().toUpper());
-                break;
-            }
-        }
-
-    arguments.append(app.replace("C:/", NeroFS::GetPrefixesPath().canonicalPath()+'/'+NeroFS::GetCurrentPrefix()+"/drive_c/"));
+    // Proton/umu should be able to translate Windows-type paths on its own, no conversion needed
+    arguments.append(path);
 
     if(!args.isEmpty())
         arguments.append(args);
