@@ -294,9 +294,9 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
 
     if(tricksToInstall.isEmpty()) {
         // UMU is supposed to have "createprefix" action, but it doesn't actually do anything
-        // tbf, neither does CMD on its own as it exits early when run through UMU,
-        // but it gives us a zero exit code so fuck it I guess?
-        umu.start(NeroFS::GetUmU(), {"cmd"});
+        // (on newer versions, it just runs explorer.exe pointed at nothing)
+        // we just need an easy scapegoat process that exits on its own without spawning a console window
+        umu.start(NeroFS::GetUmU(), {"reg", "/?"});
     } else {
         tricksToInstall.prepend("winetricks");
         QStringList argsList;
