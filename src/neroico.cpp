@@ -43,6 +43,10 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
             // test if this is writable
             tmpDir.mkdir("nero-manager");
             if(tmpDir.cd("nero-manager")) {
+                // clean tmp directory
+                for(const auto &file : tmpDir.entryList())
+                    tmpDir.remove(file);
+
                 QProcess extProcess;
                 extProcess.setWorkingDirectory(tmpDir.path());
 
@@ -106,7 +110,7 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
 
                         extProcess.waitForFinished();
 
-                        if(extProcess.exitCode() == 0) {
+                        if(tmpDir.exists(sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".exe") + ".png")) {
                             return QString("%1/%2.png").arg(tmpDir.path(), sourceFile.mid(sourceFile.lastIndexOf('/')+1).remove(".exe"));
                         } else {
                             printf("icotool failed to convert icon to png, aborting...\n");
@@ -134,6 +138,10 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
             // test if this is writable
             tmpDir.mkdir("nero-manager");
             if(tmpDir.cd("nero-manager")) {
+                // clean tmp directory
+                for(const auto &file : tmpDir.entryList())
+                    tmpDir.remove(file);
+
                 QProcess extProcess;
                 extProcess.setWorkingDirectory(tmpDir.path());
 
@@ -217,6 +225,10 @@ QString NeroIcoExtractor::GetIcon(QString sourceFile)
         // test if this is writable
         tmpDir.mkdir("nero-manager");
         if(tmpDir.cd("nero-manager")) {
+            // clean tmp directory
+            for(const auto &file : tmpDir.entryList())
+                tmpDir.remove(file);
+
             QProcess extProcess;
             extProcess.setWorkingDirectory(tmpDir.path());
 
