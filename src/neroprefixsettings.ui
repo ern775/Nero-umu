@@ -1304,12 +1304,17 @@
             </item>
             <item>
              <property name="text">
-              <string>Use Esync</string>
+              <string>Force enable Fsync</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Use Legacy Sync</string>
+              <string>Force enable Esync</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Use Legacy Sync only</string>
              </property>
             </item>
            </widget>

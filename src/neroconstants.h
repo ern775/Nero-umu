@@ -20,12 +20,13 @@
 #ifndef NEROCONSTANTS_H
 #define NEROCONSTANTS_H
 
-#include <QStringList>
-
 class NeroConstant
 {
 public:
     NeroConstant();
+
+    // TODO: settings should also have associated maps
+    // so the ini can use human readable strings that are version-agnostic
 
     static enum {
         WinVer2dot0 = 0,
@@ -88,7 +89,8 @@ public:
     } DebugOutputModes_e;
 
     static enum {
-        Fsync = 0,
+        NTsync = 0,
+        Fsync,
         Esync,
         NoSync
     } FileSyncModes_e;

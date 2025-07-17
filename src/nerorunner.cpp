@@ -115,10 +115,11 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
         if(!settings->value("Shortcuts--"+hash+"/FileSyncMode").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/FileSyncMode").toInt()) {
-            // ntsync is better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
-            // older Protons should just safely ignore this and fallback to fsync.
+            // ntsync SHOULD be better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
+            // ...however, Teknoparrot's BudgieLoader seems to fail in some scenarios with NTsync forced.
+            // For older Protons, they should be safely ignoring this and fallback to fsync anyways.
             // (assuming WOW64 doesn't hurt compat with GE-Proton10's 1-8)
-            case NeroConstant::Fsync:
+            case NeroConstant::NTsync:
                 env.insert("PROTON_USE_NTSYNC", "1");
                 env.insert("PROTON_USE_WOW64", "1");
                 break;
@@ -126,9 +127,10 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 env.insert("PROTON_NO_ESYNC", "1");
             case NeroConstant::Esync:
                 env.insert("PROTON_NO_FSYNC", "1"); break;
+            default: break;
             }
         } else switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
-            case NeroConstant::Fsync:
+            case NeroConstant::NTsync:
                 env.insert("PROTON_USE_NTSYNC", "1");
                 env.insert("PROTON_USE_WOW64", "1");
                 break;
@@ -136,6 +138,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                 env.insert("PROTON_NO_ESYNC", "1");
             case NeroConstant::Esync:
                 env.insert("PROTON_NO_FSYNC", "1"); break;
+            default: break;
         }
 
         if(!settings->value("Shortcuts--"+hash+"/DebugOutput").toString().isEmpty()) {
@@ -572,10 +575,11 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         env.insert("OBS_VKCAPTURE", "1");
 
     switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
-    // ntsync is better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
-    // older Protons should just safely ignore this and fallback to fsync.
+    // ntsync SHOULD be better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
+    // ...however, Teknoparrot's BudgieLoader seems to fail in some scenarios with NTsync forced.
+    // For older Protons, they should be safely ignoring this and fallback to fsync anyways.
     // (assuming WOW64 doesn't hurt compat with GE-Proton10's 1-8)
-    case NeroConstant::Fsync:
+    case NeroConstant::NTsync:
         env.insert("PROTON_USE_NTSYNC", "1");
         env.insert("PROTON_USE_WOW64", "1");
         break;
@@ -583,6 +587,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
         env.insert("PROTON_NO_ESYNC", "1");
     case NeroConstant::Esync:
         env.insert("PROTON_NO_FSYNC", "1"); break;
+    default: break;
     }
 
     switch(settings->value("PrefixSettings/DebugOutput").toInt()) {
