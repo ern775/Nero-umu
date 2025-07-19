@@ -126,10 +126,15 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                     env.insert("PROTON_USE_WOW64", "1");
                 }
                 break;
+            case NeroConstant::Fsync:
+                env.insert("PROTON_NO_NTSYNC", "1");
+                break;
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
             case NeroConstant::Esync:
-                env.insert("PROTON_NO_FSYNC", "1"); break;
+                env.insert("PROTON_NO_NTSYNC", "1");
+                env.insert("PROTON_NO_FSYNC", "1");
+                break;
             default: break;
             }
         } else switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
@@ -139,10 +144,15 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
                     env.insert("PROTON_USE_WOW64", "1");
                 }
                 break;
+            case NeroConstant::Fsync:
+                env.insert("PROTON_NO_NTSYNC", "1");
+                break;
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
             case NeroConstant::Esync:
-                env.insert("PROTON_NO_FSYNC", "1"); break;
+                env.insert("PROTON_NO_NTSYNC", "1");
+                env.insert("PROTON_NO_FSYNC", "1");
+                break;
             default: break;
         }
 
@@ -591,10 +601,15 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
             env.insert("PROTON_USE_WOW64", "1");
         }
         break;
+    case NeroConstant::Fsync:
+        env.insert("PROTON_NO_NTSYNC", "1");
+        break;
     case NeroConstant::NoSync:
         env.insert("PROTON_NO_ESYNC", "1");
     case NeroConstant::Esync:
-        env.insert("PROTON_NO_FSYNC", "1"); break;
+        env.insert("PROTON_NO_NTSYNC", "1");
+        env.insert("PROTON_NO_FSYNC", "1");
+        break;
     default: break;
     }
 
