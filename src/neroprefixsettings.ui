@@ -1844,7 +1844,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QScrollArea" name="scrollArea_2">
+       <widget class="QScrollArea" name="infoScrollArea">
         <property name="styleSheet">
          <string notr="true">background-color: transparent</string>
         </property>
@@ -1860,7 +1860,7 @@
         <property name="widgetResizable">
          <bool>true</bool>
         </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents_2">
+        <widget class="QWidget" name="infoScrollAreaContents">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -1911,6 +1911,57 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>shortcutName</tabstop>
+  <tabstop>shortcutPath</tabstop>
+  <tabstop>shortcutPathBtn</tabstop>
+  <tabstop>openToShortcutPath</tabstop>
+  <tabstop>shortcutArgs</tabstop>
+  <tabstop>shortcutIco</tabstop>
+  <tabstop>prefixRunner</tabstop>
+  <tabstop>togglePrefixRuntimeUpdates</tabstop>
+  <tabstop>toggleNVAPI</tabstop>
+  <tabstop>limitFPSbox</tabstop>
+  <tabstop>setScalingBox</tabstop>
+  <tabstop>fsrCustomW</tabstop>
+  <tabstop>fsrCustomH</tabstop>
+  <tabstop>gamescopeSetScalerBox</tabstop>
+  <tabstop>gamescopeSetUpscalingBox</tabstop>
+  <tabstop>gamescopeAppWidth</tabstop>
+  <tabstop>gamescopeAppHeight</tabstop>
+  <tabstop>gamescopeWindowWidth</tabstop>
+  <tabstop>gamescopeWindowHeight</tabstop>
+  <tabstop>toggleGamemode</tabstop>
+  <tabstop>toggleMangohud</tabstop>
+  <tabstop>toggleVKcap</tabstop>
+  <tabstop>winVerBox</tabstop>
+  <tabstop>dllAdder</tabstop>
+  <tabstop>dllAddBtn</tabstop>
+  <tabstop>toggleShortcutPrefixOverride</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>preRunScriptPath</tabstop>
+  <tabstop>preRunClearBtn</tabstop>
+  <tabstop>preRunButton</tabstop>
+  <tabstop>postRunScriptPath</tabstop>
+  <tabstop>postRunClearBtn</tabstop>
+  <tabstop>postRunButton</tabstop>
+  <tabstop>prefixEnvVars</tabstop>
+  <tabstop>debugBox</tabstop>
+  <tabstop>prefixInstallDiscordRPC</tabstop>
+  <tabstop>prefixDrivesBtn</tabstop>
+  <tabstop>prefixRegeditBtn</tabstop>
+  <tabstop>prefixWinecfgBtn</tabstop>
+  <tabstop>fileSyncBox</tabstop>
+  <tabstop>toggleLimitGL</tabstop>
+  <tabstop>toggleNoD8VK</tabstop>
+  <tabstop>toggleWineD3D</tabstop>
+  <tabstop>toggleWayland</tabstop>
+  <tabstop>toggleWaylandHDR</tabstop>
+  <tabstop>toggleHidraw</tabstop>
+  <tabstop>toggleXalia</tabstop>
+  <tabstop>infoScrollArea</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

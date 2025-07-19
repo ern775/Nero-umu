@@ -93,6 +93,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>searchBox</tabstop>
+  <tabstop>scrollArea</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
