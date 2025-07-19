@@ -52,7 +52,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         env = QProcessEnvironment::systemEnvironment();
         env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
         env.insert("GAMEID", "0");
-        env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+settings->value("PrefixSettings/CurrentRunner").toString());
+        const QString protonRunner = settings->value("PrefixSettings/CurrentRunner").toString();
+        env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+protonRunner);
 
         if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
             if(!env.contains("UMU_RUNTIME_UPDATE")) env.insert("UMU_RUNTIME_UPDATE", "1");
@@ -116,12 +117,14 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         if(!settings->value("Shortcuts--"+hash+"/FileSyncMode").toString().isEmpty()) {
             switch(settings->value("Shortcuts--"+hash+"/FileSyncMode").toInt()) {
             // ntsync SHOULD be better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
-            // ...however, Teknoparrot's BudgieLoader seems to fail in some scenarios with NTsync forced.
             // For older Protons, they should be safely ignoring this and fallback to fsync anyways.
-            // (assuming WOW64 doesn't hurt compat with GE-Proton10's 1-8)
+            // Newer protons than GE10-9 should enable this automatically from its end, and doesn't require WOW64
+            // (and currently, WOW64 seems problematic for some fringe cases, like TeknoParrot's BudgieLoader not spawning a window)
             case NeroConstant::NTsync:
-                env.insert("PROTON_USE_NTSYNC", "1");
-                env.insert("PROTON_USE_WOW64", "1");
+                if(protonRunner == "GE-Proton10-9") {
+                    env.insert("PROTON_USE_NTSYNC", "1");
+                    env.insert("PROTON_USE_WOW64", "1");
+                }
                 break;
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
@@ -131,8 +134,10 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             }
         } else switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
             case NeroConstant::NTsync:
-                env.insert("PROTON_USE_NTSYNC", "1");
-                env.insert("PROTON_USE_WOW64", "1");
+                if(protonRunner == "GE-Proton10-9") {
+                    env.insert("PROTON_USE_NTSYNC", "1");
+                    env.insert("PROTON_USE_WOW64", "1");
+                }
                 break;
             case NeroConstant::NoSync:
                 env.insert("PROTON_NO_ESYNC", "1");
@@ -545,7 +550,8 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     env = QProcessEnvironment::systemEnvironment();
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
     env.insert("GAMEID", "0");
-    env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+settings->value("PrefixSettings/CurrentRunner").toString());
+    const QString protonRunner = settings->value("PrefixSettings/CurrentRunner").toString();
+    env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+protonRunner);
 
     if(prefixAlreadyRunning)
         env.insert("PROTON_VERB", "run");
@@ -576,12 +582,14 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
 
     switch(settings->value("PrefixSettings/FileSyncMode").toInt()) {
     // ntsync SHOULD be better in all scenarios compared to other sync options, but requires kernel 6.14+ and GE-Proton10-9+
-    // ...however, Teknoparrot's BudgieLoader seems to fail in some scenarios with NTsync forced.
     // For older Protons, they should be safely ignoring this and fallback to fsync anyways.
-    // (assuming WOW64 doesn't hurt compat with GE-Proton10's 1-8)
+    // Newer protons than GE10-9 should enable this automatically from its end, and doesn't require WOW64
+    // (and currently, WOW64 seems problematic for some fringe cases, like TeknoParrot's BudgieLoader not spawning a window)
     case NeroConstant::NTsync:
-        env.insert("PROTON_USE_NTSYNC", "1");
-        env.insert("PROTON_USE_WOW64", "1");
+        if(protonRunner == "GE-Proton10-9") {
+            env.insert("PROTON_USE_NTSYNC", "1");
+            env.insert("PROTON_USE_WOW64", "1");
+        }
         break;
     case NeroConstant::NoSync:
         env.insert("PROTON_NO_ESYNC", "1");
