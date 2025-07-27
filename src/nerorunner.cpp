@@ -62,6 +62,8 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             env.insert("PROTON_VERB", "run");
         else env.insert("PROTON_VERB", "waitforexitandrun");
 
+        // WAS added here to unrotate Switch controllers,
+        // but may not actually be necessary on newer versions based on SDL3? iunno
         if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
             env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", "0");
 
