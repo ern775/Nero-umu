@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(Nero-UMU
-        VERSION 1.1.3
+        VERSION 1.1.4
         DESCRIPTION "An umu-launcher manager and launcher"
         LANGUAGES CXX)
 set(NERO_CODENAME "Magnus")
