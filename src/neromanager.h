@@ -109,6 +109,7 @@ public slots:
     void handleUmuSignal(const int &);
 
 private slots:
+    void prefixDefaultButtons_clicked();
     void prefixMainButtons_clicked();
     void prefixDeleteButtons_clicked();
     void prefixShortcutPlayButtons_clicked();
@@ -176,6 +177,7 @@ private:
     QStringList oneOffsRunning;
 
     // Prefixes list assets
+    QList<QPushButton*> prefixDefaultButton;
     QList<QPushButton*> prefixMainButton;
     QList<QPushButton*> prefixDeleteButton;
 
