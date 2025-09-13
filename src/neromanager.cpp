@@ -207,9 +207,10 @@ void NeroManagerWindow::RenderPrefixes()
             prefixDefaultButton.at(i)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
             prefixDefaultButton.at(i)->setToolTip("Make Default");
             prefixDefaultButton.at(i)->setProperty("slot", i);
+            prefixDefaultButton.at(i)->setFlat(true);
             if(!QString::compare(managerCfg->value("DefaultPrefix").toString(), NeroFS::GetPrefixes().at(i))) {
-                prefixDefaultButton.at(i)->setDisabled(true);
-                prefixDefaultButton.at(i)->setFlat(true);
+                prefixDefaultButton.at(i)->setToolTip("Remove Default");
+                prefixDefaultButton.at(i)->setIcon(QIcon::fromTheme("gtk-cancel"));
             }
 
             prefixMainButton.at(i)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -414,9 +415,10 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
         prefixDefaultButton.at(pos)->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
         prefixDefaultButton.at(pos)->setToolTip("Make Default");
         prefixDefaultButton.at(pos)->setProperty("slot", pos);
+        prefixDefaultButton.at(pos)->setFlat(true);
         if(!QString::compare(managerCfg->value("DefaultPrefix").toString(), NeroFS::GetPrefixes().at(pos))) {
-            prefixDefaultButton.at(pos)->setDisabled(true);
-            prefixDefaultButton.at(pos)->setFlat(true);
+            prefixDefaultButton.at(pos)->setToolTip("Remove Default");
+            prefixDefaultButton.at(pos)->setIcon(QIcon::fromTheme("gtk-cancel"));
         }
 
         prefixMainButton.at(pos)->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -614,15 +616,22 @@ void NeroManagerWindow::prefixDefaultButtons_clicked()
     unsigned int pos = sender()->property("slot").toInt();
     int oldPos = prefixes.indexOf(defaultPrefix, 0, Qt::CaseSensitive);
 
-    prefixDefaultButton.at(pos)->setDisabled(true);
-    prefixDefaultButton.at(pos)->setFlat(true);
+    if(pos == oldPos) {
+        prefixDefaultButton.at(pos)->setToolTip("Make Default");
+        prefixDefaultButton.at(pos)->setIcon(QIcon::fromTheme("checkmark"));
 
-    if(oldPos != -1) {
-        prefixDefaultButton.at(oldPos)->setDisabled(false);
-        prefixDefaultButton.at(oldPos)->setFlat(false);
+        managerCfg->remove("DefaultPrefix");
+    } else {
+        prefixDefaultButton.at(pos)->setToolTip("Remove Default");
+        prefixDefaultButton.at(pos)->setIcon(QIcon::fromTheme("gtk-cancel"));
+
+        if(oldPos != -1) {
+            prefixDefaultButton.at(oldPos)->setToolTip("Make Default");
+            prefixDefaultButton.at(oldPos)->setIcon(QIcon::fromTheme("checkmark"));
+        }
+
+        managerCfg->setValue("DefaultPrefix", prefixes.at(pos));
     }
-
-    managerCfg->setValue("DefaultPrefix", prefixes.at(pos));
 }
 
 void NeroManagerWindow::prefixDeleteButtons_clicked()
