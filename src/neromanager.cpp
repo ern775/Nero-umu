@@ -683,6 +683,8 @@ void NeroManagerWindow::prefixDeleteButtons_clicked()
             if(NeroFS::GetCurrentPrefix() == prefixMainButton.at(slot)->text())
                 CleanupShortcuts();
 
+            // not sure if this is the smartest way to update main window
+            SetHeader();
             RenderPrefixes();
         }
     }
@@ -1003,6 +1005,10 @@ void NeroManagerWindow::prefixWizard_result()
 
     delete wizard;
     wizard = nullptr;
+    
+    // not sure if this is the smartest way to update main window
+    SetHeader();
+    RenderPrefixes();
 }
 
 void NeroManagerWindow::prefixSettings_result()
