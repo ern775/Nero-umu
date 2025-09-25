@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>241</width>
-    <height>74</height>
+    <width>619</width>
+    <height>142</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,27 +16,42 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QCheckBox" name="shortcutHide">
-     <property name="text">
-      <string>Hide to System Tray when starting shortcuts
-(Nero Manager will unhide when shortcut ends)</string>
+    <layout class="QVBoxLayout" name="options">
+     <property name="topMargin">
+      <number>10</number>
      </property>
-    </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+     <property name="bottomMargin">
+      <number>10</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+     <item>
+      <widget class="QCheckBox" name="shortcutHide">
+       <property name="text">
+        <string>Hide to System Tray when starting shortcuts (Nero Manager will unhide when shortcut ends)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="defaultPrefixStartBox">
+       <item>
+        <widget class="QCheckBox" name="defaultPrefixStart">
+         <property name="text">
+          <string>Use default prefix to launch executables when given as a parameter
+(ex. When launching from a file manager)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="defaultPrefix">
+         <property name="placeholderText">
+          <string>Select Default Prefix</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">

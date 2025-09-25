@@ -18,19 +18,26 @@
 */
 
 #include "neropreferences.h"
+#include "nerofs.h"
 #include "ui_neropreferences.h"
 
 #include <QShortcut>
+#include <QCheckBox>
 
 NeroManagerPreferences::NeroManagerPreferences(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::NeroManagerPreferences)
 {
     ui->setupUi(this);
+    // make window non-resizeable
+    setFixedSize(sizeHint());
 
     // shortcut ctrl/cmd + W to close the popup window
 	QShortcut *shortcutClose = new QShortcut(QKeySequence::Close, this);
 	connect(shortcutClose, &QShortcut::activated, this,&NeroManagerPreferences::close);
+
+    ui->defaultPrefix->addItems(NeroFS::GetPrefixes());
+    connect(ui->defaultPrefixStart, &QCheckBox::clicked, this, &NeroManagerPreferences::on_defaultPrefixStart_clicked);
 }
 
 NeroManagerPreferences::~NeroManagerPreferences()
@@ -38,6 +45,8 @@ NeroManagerPreferences::~NeroManagerPreferences()
     if(accepted) {
         //managerCfg->setValue("UseNotifier", ui->runnerNotifs->isChecked());
         managerCfg->setValue("ShortcutHidesManager", ui->shortcutHide->isChecked());
+        managerCfg->setValue("RunWithDefaultPrefix", ui->defaultPrefixStart->isChecked());
+        managerCfg->setValue("DefaultPrefix", ui->defaultPrefix->currentText());
     }
     delete ui;
 }
@@ -47,4 +56,12 @@ void NeroManagerPreferences::BindSettings(QSettings *cfg)
     managerCfg = cfg;
     //ui->runnerNotifs->setChecked(managerCfg->value("UseNotifier").toBool());
     ui->shortcutHide->setChecked(managerCfg->value("ShortcutHidesManager").toBool());
+    ui->defaultPrefixStart->setChecked(managerCfg->value("RunWithDefaultPrefix").toBool());
+    ui->defaultPrefix->setCurrentText(managerCfg->value("DefaultPrefix").toString());
+    ui->defaultPrefix->setEnabled(ui->defaultPrefixStart->isChecked());
+}
+
+void NeroManagerPreferences::on_defaultPrefixStart_clicked()
+{
+    ui->defaultPrefix->setEnabled(ui->defaultPrefixStart->isChecked());
 }

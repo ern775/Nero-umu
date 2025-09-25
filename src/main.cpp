@@ -64,16 +64,17 @@ int main(int argc, char *argv[])
             managerCfg->beginGroup("NeroSettings");
 
             // One-time runner (executable only) when DefaultPrefix set 
-            if(argc < 3 && (arguments.last().endsWith(".exe") || arguments.last().endsWith(".msi") || arguments.last().endsWith(".bat")) && 
-                !managerCfg->value("DefaultPrefix").isNull()) {
+            if(argc < 3 && (arguments.last().endsWith(".exe") || arguments.last().endsWith(".msi") || arguments.last().endsWith(".bat")) 
+                && !managerCfg->value("DefaultPrefix").toString().isEmpty()
+                && managerCfg->value("RunWithDefaultPrefix").toBool()) {
 
-                printf("Requested to open file!\n");
+                printf("Launching with default prefix: %s\n", qPrintable(managerCfg->value("DefaultPrefix").toString()));
 
                 NeroFS::SetCurrentPrefix(managerCfg->value("DefaultPrefix").toString());
                 NeroRunner runner;
                 return runner.StartOnetime(arguments.last(), {});
             // One-time runner (executable only) - prompt user for prefix
-            } else if(managerCfg->value("DefaultPrefix").isNull()) {
+            } else if(!managerCfg->value("RunWithDefaultPrefix").toBool() || managerCfg->value("DefaultPrefix").toString().isEmpty()) {
                 NeroOneTimeDialog oneTimeDiag;
                 oneTimeDiag.exec();
 

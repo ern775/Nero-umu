@@ -150,6 +150,9 @@
             <bold>false</bold>
            </font>
           </property>
+          <property name="text">
+           <string>Run Executable in Prefix...</string>
+          </property>
           <property name="icon">
            <iconset theme="media-playback-start"/>
           </property>

@@ -43,6 +43,7 @@ private:
     Ui::NeroManagerPreferences *ui;
     QSettings *managerCfg;
     bool accepted = false;
+    void on_defaultPrefixStart_clicked();
 };
 
 #endif // NEROPREFERENCES_H
