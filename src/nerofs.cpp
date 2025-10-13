@@ -293,7 +293,7 @@ void NeroFS::AddNewPrefix(const QString &newPrefix, const QString &runner)
     prefixCfg->setValue("ForceiGPU", false);
     prefixCfg->setValue("LimitGLextensions", false);
     prefixCfg->setValue("DebugOutput", NeroConstant::DebugDisabled);
-    prefixCfg->setValue("FileSyncMode", NeroConstant::Fsync);
+    prefixCfg->setValue("FileSyncMode", NeroConstant::NTsync);
     prefixCfg->setValue("NoD8VK", false);
     prefixCfg->setValue("ForceWineD3D", false);
     prefixCfg->setValue("UseWayland", false);
