@@ -73,11 +73,12 @@ NeroShortcutWizard::~NeroShortcutWizard()
 
 void NeroShortcutWizard::on_shortcutName_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty()) {
+    QString appName = arg1.trimmed();
+    if(appName.isEmpty()) {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         ui->nameMatchWarning->setVisible(false);
     } else {
-        if(existingShortcuts.contains(arg1)) {
+        if(existingShortcuts.contains(appName)) {
             ui->nameMatchWarning->setVisible(true);
             ui->shortcutName->setStyleSheet("color: red");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
