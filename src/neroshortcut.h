@@ -39,7 +39,7 @@ public:
     QString shortcutName;
 
 private slots:
-    void on_shortcutName_textEdited(const QString &arg1);
+    void on_shortcutName_textChanged(const QString &arg1);
 
     void on_selectBox_clicked();
 
