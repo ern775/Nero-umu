@@ -44,11 +44,6 @@ NeroShortcutWizard::NeroShortcutWizard(QWidget *parent, const QString &newAppPat
 
     NeroIcoExtractor::CheckIcoCache(QDir(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()));
 
-    // set the shortcut name field to the exe name
-    QString newAppNameWithExtension = newAppPath.right((newAppPath.length() - 1) - newAppPath.lastIndexOf("/"));
-    QString newAppName = newAppNameWithExtension.left(newAppNameWithExtension.lastIndexOf("."));
-    ui->shortcutName->setText(newAppName);
-
     QGuiApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     appIcon = NeroIcoExtractor::GetIcon(newAppPath);
     QGuiApplication::restoreOverrideCursor();
@@ -58,8 +53,13 @@ NeroShortcutWizard::NeroShortcutWizard(QWidget *parent, const QString &newAppPat
             ui->appIcon->setIcon(QPixmap(appIcon).scaled(48,48,Qt::KeepAspectRatio,Qt::SmoothTransformation));
         else ui->appIcon->setIcon(QPixmap(appIcon));
     }
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
     existingShortcuts.append(NeroFS::GetCurrentPrefixShortcuts());
+    
+    // set the shortcut name field to the exe name
+    int newAppPathDirLength = newAppPath.lastIndexOf("/") + 1;
+    QString newAppName = newAppPath.mid(newAppPathDirLength, newAppPath.lastIndexOf(".") - newAppPathDirLength);
+    ui->shortcutName->setText(newAppName);
+    ui->shortcutName->selectAll();
 }
 
 NeroShortcutWizard::~NeroShortcutWizard()
@@ -71,13 +71,14 @@ NeroShortcutWizard::~NeroShortcutWizard()
 }
 
 
-void NeroShortcutWizard::on_shortcutName_textEdited(const QString &arg1)
+void NeroShortcutWizard::on_shortcutName_textChanged(const QString &arg1)
 {
-    if(arg1.isEmpty()) {
+    QString appName = arg1.trimmed();
+    if(appName.isEmpty()) {
         ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         ui->nameMatchWarning->setVisible(false);
     } else {
-        if(existingShortcuts.contains(arg1)) {
+        if(existingShortcuts.contains(appName)) {
             ui->nameMatchWarning->setVisible(true);
             ui->shortcutName->setStyleSheet("color: red");
             ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
