@@ -60,7 +60,10 @@ int main(int argc, char *argv[])
             arguments.append(argv[i]);
 
         // One-time runner (executable only) - prompt user for prefix
-        if(argc < 3 && (arguments.last().endsWith(".exe") || arguments.last().endsWith(".msi") || arguments.last().endsWith(".bat") || arguments.last().endsWith(".cmd"))) {
+        if(argc < 3 && (arguments.last().toLower().endsWith(".exe") ||
+                        arguments.last().toLower().endsWith(".msi") ||
+                        arguments.last().toLower().endsWith(".bat") ||
+                        arguments.last().toLower().endsWith(".cmd"))) {
             printf("Requested to open file!\n");
 
             if(NeroFS::InitPaths()) {
@@ -81,9 +84,10 @@ int main(int argc, char *argv[])
             }
         // One-time runner with provided prefix name
         } else if(argc > 3 && arguments.contains("--prefix") &&
-                  (arguments.at(arguments.indexOf("--prefix")+2).endsWith(".exe") ||
-                   arguments.at(arguments.indexOf("--prefix")+2).endsWith(".msi") ||
-                   arguments.at(arguments.indexOf("--prefix")+2).endsWith(".bat"))) {
+                  (arguments.at(arguments.indexOf("--prefix")+2).toLower().endsWith(".exe") ||
+                   arguments.at(arguments.indexOf("--prefix")+2).toLower().endsWith(".msi") ||
+                   arguments.at(arguments.indexOf("--prefix")+2).toLower().endsWith(".bat") ||
+                   arguments.at(arguments.indexOf("--prefix")+2).toLower().endsWith(".cmd"))) {
             if(NeroFS::InitPaths()) {
                 NeroFS::SetCurrentPrefix(arguments.takeAt(arguments.indexOf("--prefix")+1));
                 arguments.removeAt(arguments.indexOf("--prefix"));
