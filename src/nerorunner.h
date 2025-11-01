@@ -35,6 +35,7 @@ public:
     int StartOnetime(const QString &, const bool & = false, const QStringList & = {});
     void WaitLoop(QProcess &, QFile &);
     void StopProcess();
+    void InitCache();
 
     bool halt = false;
     bool loggingEnabled = false;

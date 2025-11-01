@@ -67,10 +67,7 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
         if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
             env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", "0");
 
-        QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
-        if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
-        env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
-        env.insert("VKD3D_SHADER_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
+        InitCache();
 
         // unfortunately, env insert does NOT allow settings bools properly as-is,
         // so all booleans have to be converted to an int string.
@@ -577,10 +574,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     if(!env.contains("SDL_GAMECONTROLLER_USE_BUTTON_LABELS"))
         env.insert("SDL_GAMECONTROLLER_USE_BUTTON_LABELS", "0");
 
-    QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
-    if(cachePath.exists(".shaderCache")) cachePath.mkdir(".shaderCache");
-    env.insert("DXVK_STATE_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
-    env.insert("VKD3D_SHADER_CACHE_PATH", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix()+"/.shaderCache");
+    InitCache();
 
     if(settings->value("PrefixSettings/RuntimeUpdateOnLaunch").toBool())
         env.insert("UMU_RUNTIME_UPDATE", "1");
@@ -847,6 +841,9 @@ void NeroRunner::WaitLoop(QProcess &runner, QFile &log)
 
 void NeroRunner::StopProcess()
 {
+    // TODO: there's almost certainly a not-shitty way of stopping spawned Wine processes
+    //       currently, the Kingdom Hearts Re-Fined patches will consistently lock up the prefix and remains resident
+    //       even after this shutdown op has supposedly completed.
     QApplication::processEvents();
     QProcess wineStopper;
     env.insert("UMU_NO_PROTON", "1");
@@ -855,4 +852,17 @@ void NeroRunner::StopProcess()
     wineStopper.setProcessEnvironment(env);
     wineStopper.start("umu-run", { NeroFS::GetProtonsPath().path()+'/'+NeroFS::GetCurrentRunner()+'/'+"proton", "runinprefix", "wineboot", "-e" });
     wineStopper.waitForFinished();
+}
+
+void NeroRunner::InitCache()
+{
+    QDir cachePath(NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
+    if(!cachePath.exists(".shaderCache")) {
+        cachePath.mkdir(".shaderCache");
+        if(!cachePath.cd(".shaderCache")) printf("Prefix cache directory not available! Not using cache...");
+        else {
+            env.insert("DXVK_STATE_CACHE_PATH", cachePath.absolutePath());
+            env.insert("VKD3D_SHADER_CACHE_PATH", cachePath.absolutePath());
+        }
+    }
 }
