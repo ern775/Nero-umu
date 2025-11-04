@@ -87,18 +87,20 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
             env.insert("WINEDLLOVERRIDES", settings->value("PrefixSettings/DLLoverrides").toStringList().join(';')+';'
                                            + env.value("WINEDLLOVERRIDES"));
 
-        if(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toString().isEmpty())
-            env.insert("PROTON_USE_WINED3D", QString::number(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toInt()));
-        else env.insert("PROTON_USE_WINED3D", QString::number(settings->value("PrefixSettings/ForceWineD3D").toInt()));
-
-        if(settings->value("Shortcuts--"+hash+"/NoD8VK").toString().isEmpty()) {
+        // D8VK is dependent on DXVK's existence, so forcing WineD3D overrides D8VK.
+        if(!settings->value("Shortcuts--"+hash+"/ForceWineD3D").toString().isEmpty())
+            env.insert("PROTON_USE_WINED3D", QString::number(settings->value("Shortcuts--"+hash+"/ForceWineD3D").toBool()));
+        else if(!settings->value("Shortcuts--"+hash+"/NoD8VK").toString().isEmpty()) {
             if(!settings->value("Shortcuts--"+hash+"/NoD8VK").toBool()) env.insert("PROTON_DXVK_D3D8", "1");
-        } else if(!settings->value("PrefixSettings/NoD8VK").toBool()) env.insert("PROTON_DXVK_D3D8", "1");
+        } else if(!settings->value("PrefixSettings/NoD8VK").toBool())
+            env.insert("PROTON_USE_WINED3D", QString::number(settings->value("PrefixSettings/ForceWineD3D").toBool()));
+        else env.insert("PROTON_DXVK_D3D8", "1");
 
+        // For what it's worth, there's also _DISABLE_NVAPI, but not sure if that's more/less useful.
         if(!settings->value("Shortcuts--"+hash+"/EnableNVAPI").toString().isEmpty()) {
-            if(settings->value("Shortcuts--"+hash+"/EnableNVAPI").toBool()) env.insert("PROTON_ENABLE_NVAPI", "1");
+            if(settings->value("Shortcuts--"+hash+"/EnableNVAPI").toBool()) env.insert("PROTON_FORCE_NVAPI", "1");
         } else if(settings->value("PrefixSettings/EnableNVAPI").toBool())
-            env.insert("PROTON_ENABLE_NVAPI", "1");
+            env.insert("PROTON_FORCE_NVAPI", "1");
 
         if(!settings->value("Shortcuts--"+hash+"/LimitGLextensions").toString().isEmpty()) {
             if(settings->value("Shortcuts--"+hash+"/LimitGLextensions").toBool()) env.insert("PROTON_OLD_GL_STRING", "1");
@@ -585,7 +587,7 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
     else if(!settings->value("PrefixSettings/NoD8VK").toBool())
         env.insert("PROTON_DXVK_D3D8", "1");
     if(settings->value("PrefixSettings/EnableNVAPI").toBool())
-        env.insert("PROTON_ENABLE_NVAPI", "1");
+        env.insert("PROTON_FORCE_NVAPI", "1");
     if(settings->value("PrefixSettings/LimitGLextensions").toBool())
         env.insert("PROTON_OLD_GL_STRING", "1");
     if(settings->value("PrefixSettings/VKcapture").toBool())
