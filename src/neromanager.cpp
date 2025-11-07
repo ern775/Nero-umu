@@ -293,7 +293,12 @@ void NeroManagerWindow::CreatePrefix(const QString &newPrefix, const QString &ru
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + newPrefix);
-    env.insert("GAMEID", "0");
+
+    // Only explicit set GAMEID when not already declared by user for (their) testing purposes
+    // (may or may not cause issues if user also selects tricks verbs, but since it needs to be expressly set by user, they assume all responsibility)
+    // See SeongGino/Nero-umu#66 for more info
+    if(!env.contains("GAMEID")) env.insert("GAMEID", "0");
+
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + runner);
     // for Proton 10+. this shit gets real annoying
     env.insert("PROTON_USE_XALIA", "0");

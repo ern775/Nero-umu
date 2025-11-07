@@ -51,7 +51,11 @@ int NeroRunner::StartShortcut(const QString &hash, const bool &prefixAlreadyRunn
 
         env = QProcessEnvironment::systemEnvironment();
         env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
-        env.insert("GAMEID", "0");
+
+        // Only explicit set GAMEID when not already declared by user
+        // See SeongGino/Nero-umu#66 for more info
+        if(!env.contains("GAMEID")) env.insert("GAMEID", "0");
+
         const QString protonRunner = settings->value("PrefixSettings/CurrentRunner").toString();
         env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+protonRunner);
 
@@ -565,7 +569,11 @@ int NeroRunner::StartOnetime(const QString &path, const bool &prefixAlreadyRunni
 
     env = QProcessEnvironment::systemEnvironment();
     env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path()+'/'+NeroFS::GetCurrentPrefix());
-    env.insert("GAMEID", "0");
+
+    // Only explicit set GAMEID when not already declared by user
+    // See SeongGino/Nero-umu#66 for more info
+    if(!env.contains("GAMEID")) env.insert("GAMEID", "0");
+
     const QString protonRunner = settings->value("PrefixSettings/CurrentRunner").toString();
     env.insert("PROTONPATH", NeroFS::GetProtonsPath().path()+'/'+protonRunner);
 
