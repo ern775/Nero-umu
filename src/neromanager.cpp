@@ -831,7 +831,7 @@ void NeroManagerWindow::tricksWindow_result()
             QString prefix = NeroFS::GetCurrentPrefix();
 
             env.insert("WINEPREFIX", NeroFS::GetPrefixesPath().path() + '/' + prefix);
-            env.insert("GAMEID", "0");
+            env.insert("GAMEID", "0"); // force gameid here since tricks installation wouldn't benefit from having a forced profile
             env.insert("PROTONPATH", NeroFS::GetProtonsPath().path() + '/' + settingsMap["CurrentRunner"].toString());
             // for Proton 10+. this shit gets real annoying
             env.insert("PROTON_USE_XALIA", "0");
