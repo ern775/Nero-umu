@@ -67,9 +67,6 @@ jobs:
         plugins: qt appimage
 
     - name: Setup AppImage
-      env:
-        EXTRA_PLATFORM_PLUGINS: libqwayland-generic.so
-        EXTRA_QT_MODULES: waylandcompositor
       run: |
         cd ${{ github.workspace }}/build
         make install DESTDIR=AppDir
